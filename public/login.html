@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion à Explorer</title>
+    <link rel="stylesheet" href="/public/assets/style.css">
+</head>
+<body class="w-screen h-screen grid sm:grid-cols-5">
+    <section class="w-full h-full hidden sm:block col-span-3 -scale-x-100">
+        <img 
+            class="w-full h-full object-cover object-center"
+            src="/public/assets/eyes.jpg" alt="Bibliothèque">
+    </section>
+    <section class="w-full h-full col-span-2 p-6 md:p-12">
+        <form action="" class="flex flex-col gap-2">
+            <h2 class="text-2xl font-semibold">
+                Connexion à l'<span 
+                    class="bg-fuchsia-600 text-white px-1.5 py-0.5 mr-0.5">Explorer</span> de Nogata
+            </h2>
+            <input 
+                class="mt-8 outline-none text-xl
+                    px-4 py-2 border transition-colors
+                    border-black/10 focus:border-fuchsia-600/25"
+                type="text"
+                placeholder="utilisateur">
+            <input 
+                class="outline-none text-xl
+                px-4 py-2 border transition-colors
+                border-black/10 focus:border-fuchsia-600/25"
+                type="password"
+                placeholder="mots de passe">
+            <div class="flex flex-row gap-4">
+                <input 
+                    class="px-3 py-1.5 bg-black/10 border border-transparent transition-colors
+                        hover:bg-black/0 cursor-pointer hover:border-fuchsia-600/25"
+                    type="submit" 
+                    value="Connexion">
+            </div>
+            <p class="text-xs py-2">
+                Une erreur est apparu
+            </p>
+        </form>
+    </section>
+</body>
+</html>
