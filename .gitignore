@@ -1,3 +1,5 @@
 /target
 node_modules
 /data
+/passwd
+/assets/style.css

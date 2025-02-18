@@ -10,6 +10,7 @@ pub fn folder(path: PathBuf, directory: Directory) -> String {
         .expect("Should have a name")
         .to_str().unwrap();
     
+    // Each directorie name and link
     let mut path_template = String::new();
     let path_str = path.to_str().unwrap();
     let mut stripped_path = path_str.strip_prefix("./data/").unwrap().to_string();
@@ -35,6 +36,7 @@ pub fn folder(path: PathBuf, directory: Directory) -> String {
         i = j + 1;
     }
 
+    // Add a link for each file/directory
     let mut files = String::new();
     for (name, is_directory) in directory.0.iter() {
         if *is_directory {

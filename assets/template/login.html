@@ -13,7 +13,7 @@
             src="/assets/img/eyes.jpg" alt="Bibliothèque">
     </section>
     <section class="w-full h-full col-span-2 p-6 md:p-12">
-        <form action="" class="flex flex-col gap-2">
+        <form action="/login" method="post" class="flex flex-col gap-2">
             <h2 class="text-2xl font-semibold">
                 Connexion à l'<span 
                     class="bg-fuchsia-600 text-white px-1.5 py-0.5 mr-0.5">Explorer</span> de Nogata
@@ -22,17 +22,19 @@
                 Accès au disque de Nogata depuis internet.
             </p>
             <input 
+                name="username"
                 class="mt-4 outline-none text-xl
                     px-4 py-2 border transition-colors
                     border-black/10 focus:border-fuchsia-600/25"
                 type="text"
-                placeholder="utilisateur">
+                placeholder="Nom d'utilisateur">
             <input 
+                name="password"
                 class="outline-none text-xl
                 px-4 py-2 border transition-colors
                 border-black/10 focus:border-fuchsia-600/25"
                 type="password"
-                placeholder="mots de passe">
+                placeholder="Mots de passe">
             <div class="flex flex-row gap-2">
                 <input 
                     class="px-3 py-1.5 bg-black/10 border border-transparent transition-colors
@@ -45,8 +47,17 @@
                     Dossier publique
                 </a>
             </div>
-            <p class="text-xs py-2">
+            <p class="text-xs py-2" id="output">
+                
             </p>
+            <script>
+                const output = document.getElementById("output");
+                if (window.location.search.includes("failed")) {
+                    output.innerText = "Mauvais identifiants";
+
+                    window.location.search = "";
+                }
+            </script>
         </form>
     </section>
 </body>
