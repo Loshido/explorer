@@ -1,13 +1,11 @@
 use std::path::{Path, PathBuf};
-
-use rocket::{fs::NamedFile, serde::json::Json};
-
-use crate::files::{Directory, read_directory};
+use rocket::fs::NamedFile;
+use crate::{files::read_directory, html::build};
 
 #[derive(Responder)]
 pub enum PublicResponse {
-    #[response(status = 200, content_type = "json")]
-    Dir(Json<Directory>),
+    #[response(status = 200, content_type = "html")]
+    Dir(String),
     #[response(status = 200)]
     File(Option<NamedFile>),
     #[response(status = 404)]
@@ -22,16 +20,23 @@ pub async fn handler(suffix: PathBuf) -> PublicResponse {
     match path.to_str() {
         Some(v) => {
             if !path.exists() {
+                // Page d'erreur
                 return PublicResponse::NotFound(format!("{} doesn't exist!", v))
             } else if path.is_dir() {
-                let dir = read_directory(path);
-                
-                return PublicResponse::Dir(Json(dir))
+                // Ouvre la page du dossier
+                let dir = read_directory(
+                    path.to_path_buf()
+                );
+                let folder = build::folder(path, dir);
+
+                return PublicResponse::Dir(folder)
             }
+            // Ouvrir le fichier
             PublicResponse::File(
                 NamedFile::open(v).await.ok()
             )
         },
+        // Page d'erreur
         _ => PublicResponse::NotFound(String::from("Not found"))
     }
 }

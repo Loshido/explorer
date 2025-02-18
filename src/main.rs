@@ -2,14 +2,14 @@
 
 mod public;
 mod html;
+mod index;
 pub mod files;
 
-#[get("/")]
-fn index() -> &'static str {
-    "Hello, world!"
-}
+use rocket::fs::FileServer;
 
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/", routes![index, public::handler])
+    rocket::build()
+        .mount("/", routes![index::handler, public::handler])
+        .mount("/assets", FileServer::from("./assets"))
 }
