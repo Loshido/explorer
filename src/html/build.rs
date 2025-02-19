@@ -1,14 +1,13 @@
 use std::path::PathBuf;
 
-use crate::{files::Directory, html::template::HTML};
+use crate::{auth::Directory, html::template::HTML};
 
 // relative + path -> ./data/public/..suffix
 // prefix + path -> /public/..suffix 
-pub fn folder(relative: PathBuf, prefix: PathBuf, path: PathBuf, directory: Directory) -> String {
-    assert!(relative.is_dir());
+pub fn folder(prefix: PathBuf, path: PathBuf, directory: Directory) -> String {
 
     // Name of the current folder
-    let combined = relative.join(&path);
+    let combined = prefix.join(&path);
     let name = combined
         .file_name().expect("should have a valid name")
         .to_str().unwrap();
@@ -60,5 +59,5 @@ pub fn folder(relative: PathBuf, prefix: PathBuf, path: PathBuf, directory: Dire
         }
     }
 
-    HTML::folder_page(name, path_template, files)
+    HTML::folder_page(name, path_template, combined.to_str().unwrap().to_string(), files)
 }

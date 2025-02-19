@@ -1,6 +1,6 @@
 use std::path::{Path, PathBuf};
 use rocket::{fs::NamedFile, http::CookieJar, response::Redirect};
-use crate::{files::read_directory, html::build, auth::fs::passwd};
+use crate::{html::build, auth::fs::{passwd, read_directory}};
 
 #[derive(Responder)]
 pub enum PrivateResponse {
@@ -56,7 +56,7 @@ pub async fn handler<'u>(suffix: PathBuf, cookie: &CookieJar<'u>) -> PrivateResp
                 let dir = read_directory(
                     path.to_path_buf()
                 );
-                let folder = build::folder(relative.to_path_buf(), prefix.to_path_buf(), suffix, dir);
+                let folder = build::folder(prefix.to_path_buf(), suffix, dir);
 
                 return PrivateResponse::Dir(folder)
             }

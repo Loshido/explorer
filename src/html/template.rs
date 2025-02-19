@@ -49,12 +49,13 @@ impl HTML {
             name.to_string(),
             ])
         }
-    pub fn folder_page(title: &str, paths: String, files: String) -> String {
+    pub fn folder_page(title: &str, paths: String, input: String, files: String) -> String {
         let template = read_template("folder_page.html");
     
         remap(&template, vec![
             title.to_string(),
             paths,
+            input,
             files
         ])
     }

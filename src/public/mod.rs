@@ -1,6 +1,6 @@
 use std::path::{Path, PathBuf};
 use rocket::fs::NamedFile;
-use crate::{files::read_directory, html::build};
+use crate::{auth::fs::read_directory, html::build};
 
 #[derive(Responder)]
 pub enum PublicResponse {
@@ -31,7 +31,7 @@ pub async fn handler(suffix: PathBuf) -> PublicResponse {
                 let dir = read_directory(
                     path.to_path_buf()
                 );
-                let folder = build::folder(relative.to_path_buf(), prefix.to_path_buf(), suffix, dir);
+                let folder = build::folder(prefix.to_path_buf(), suffix, dir);
 
                 return PublicResponse::Dir(folder)
             }

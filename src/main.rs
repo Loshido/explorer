@@ -4,9 +4,9 @@ mod index;
 mod public;
 mod private;
 mod auth;
+mod import;
 
 mod html;
-pub mod files;
 
 use rocket::fs::FileServer;
 
@@ -17,6 +17,7 @@ fn rocket() -> _ {
             index::handler, 
             public::handler, 
             private::handler,
+            import::handler,
             auth::handler::post
         ])
         .mount("/assets", FileServer::from("./assets"))
