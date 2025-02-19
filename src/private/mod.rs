@@ -10,7 +10,7 @@ pub enum PrivateResponse {
     File(Option<NamedFile>),
     #[response(status = 404)]
     NotFound(String),
-    #[response(status = 401)]
+    #[response(status = 303)]
     Unauthorized(Redirect)
 }
 
@@ -42,8 +42,9 @@ pub async fn handler<'u>(suffix: PathBuf, cookie: &CookieJar<'u>) -> PrivateResp
         }
     }
 
-    let prefix = Path::new("./data/");
-    let path = prefix.join(suffix);
+    let relative = Path::new("./data/");
+    let prefix = Path::new("/private/");
+    let path = relative.join(suffix.clone());
 
     match path.to_str() {
         Some(v) => {
@@ -55,7 +56,7 @@ pub async fn handler<'u>(suffix: PathBuf, cookie: &CookieJar<'u>) -> PrivateResp
                 let dir = read_directory(
                     path.to_path_buf()
                 );
-                let folder = build::folder(path, dir);
+                let folder = build::folder(relative.to_path_buf(), prefix.to_path_buf(), suffix, dir);
 
                 return PrivateResponse::Dir(folder)
             }

@@ -14,8 +14,12 @@ pub enum PublicResponse {
 
 #[get("/public/<suffix..>")]
 pub async fn handler(suffix: PathBuf) -> PublicResponse {
-    let prefix = Path::new("./data/public/");
-    let path = prefix.join(suffix);
+    // relative path to get files from the disk
+    let relative = Path::new("./data/public/");
+
+    // Prefix for redirection
+    let prefix = Path::new("/public/");
+    let path = relative.join(suffix.clone());
 
     match path.to_str() {
         Some(v) => {
@@ -27,7 +31,7 @@ pub async fn handler(suffix: PathBuf) -> PublicResponse {
                 let dir = read_directory(
                     path.to_path_buf()
                 );
-                let folder = build::folder(path, dir);
+                let folder = build::folder(relative.to_path_buf(), prefix.to_path_buf(), suffix, dir);
 
                 return PublicResponse::Dir(folder)
             }

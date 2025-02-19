@@ -1,55 +1,59 @@
-use std::{path::PathBuf, str::from_utf8};
+use std::path::PathBuf;
 
 use crate::{files::Directory, html::template::HTML};
 
-pub fn folder(path: PathBuf, directory: Directory) -> String {
-    assert!(path.is_dir());
+// relative + path -> ./data/public/..suffix
+// prefix + path -> /public/..suffix 
+pub fn folder(relative: PathBuf, prefix: PathBuf, path: PathBuf, directory: Directory) -> String {
+    assert!(relative.is_dir());
 
     // Name of the current folder
-    let name = path.file_name()
-        .expect("Should have a name")
+    let combined = relative.join(&path);
+    let name = combined
+        .file_name().expect("should have a valid name")
         .to_str().unwrap();
     
     // Each directorie name and link
-    let mut path_template = String::new();
-    let path_str = path.to_str().unwrap();
-    let mut stripped_path = path_str.strip_prefix("./data/").unwrap().to_string();
-    stripped_path.push_str("/");
-    let subpath = stripped_path.as_bytes();
+    let mut path_template = HTML::path(
+        prefix
+            .file_name().unwrap()
+            .to_str().unwrap(), 
+        prefix.to_str().unwrap()
+    );
 
-    let mut i = 0;
-    for j in 0..subpath.len() {
-        if subpath[j] != b'/' {
-            continue;
+    let mut subpath = String::new();
+    for slice in path.iter() {
+        let name = slice.to_str().unwrap().to_string();
+        if subpath.len() == 0 {
+            subpath = name.clone();
+        } else {
+            subpath += &format!("/{}", &name);
         }
 
-        let lpath = &subpath[0..j];
-        let name = &subpath[i..j];
-        if name.len() == 0 {
-            continue;
-        }
         let template = HTML::path(
-            from_utf8(name).unwrap(), 
-            from_utf8(lpath).unwrap()
+            &name, 
+            prefix.join(&subpath).to_str().unwrap()
         );
+
         path_template += &template;
-        i = j + 1;
     }
 
     // Add a link for each file/directory
     let mut files = String::new();
     for (name, is_directory) in directory.0.iter() {
+        let mut combined = prefix.join(&path);
+        combined.push(name);
         if *is_directory {
             let folder = HTML::folder(
-                &name, 
-                &format!("/{}{}", stripped_path, name)
+                &name,
+                combined.to_str().unwrap(), 
             );
-
+            
             files += &folder;
         } else {
             let file = HTML::file(
                 &name, 
-                &format!("/{}{}", stripped_path, name)
+                combined.to_str().unwrap()
             );
 
             files += &file;
