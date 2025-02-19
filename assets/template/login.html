@@ -21,22 +21,24 @@
             <p>
                 Accès au disque de Nogata depuis internet.
             </p>
-            <input 
-                name="username"
-                class="mt-4 outline-none text-xl
+            <div id="inputs" class="flex flex-col gap-2">
+                <input 
+                    name="username"
+                    class="mt-4 outline-none text-xl
+                        px-4 py-2 border transition-colors
+                        border-black/10 focus:border-fuchsia-600/25"
+                    type="text"
+                    placeholder="Nom d'utilisateur">
+                <input 
+                    name="password"
+                    class="outline-none text-xl
                     px-4 py-2 border transition-colors
                     border-black/10 focus:border-fuchsia-600/25"
-                type="text"
-                placeholder="Nom d'utilisateur">
-            <input 
-                name="password"
-                class="outline-none text-xl
-                px-4 py-2 border transition-colors
-                border-black/10 focus:border-fuchsia-600/25"
-                type="password"
-                placeholder="Mots de passe">
+                    type="password"
+                    placeholder="Mots de passe">
+            </div>
             <div class="flex flex-row gap-2">
-                <input 
+                <input
                     class="px-3 py-1.5 bg-black/10 border border-transparent transition-colors
                         hover:bg-black/0 cursor-pointer hover:border-fuchsia-600/25"
                     type="submit" 
@@ -56,6 +58,10 @@
                     output.innerText = "Mauvais identifiants";
 
                     window.location.search = "";
+                } else if(document.cookie.includes('token')) {
+                    document.getElementById("inputs").style.display = "none";
+                    document.querySelector(`input[type="submit"]`).value = "Accès privée"
+                    document.querySelector(`a[href="/public"]`).style.display = "none"
                 }
             </script>
         </form>

@@ -17,6 +17,12 @@ impl User {
     // return a hash if the user have the correct credentials
     fn login(&mut self, username: &str, password: &str) -> Option<u64> {
         if self.0.0 == username && self.0.1 == password {
+            if self.0.3.is_some() {
+                let hash = self.0.3.unwrap();
+                if self.auth(hash) {
+                    return Some(hash)
+                }
+            }
             let mut rng = rand::rng();
             let random_bytes: [u8; 32] = rng.random();
         
