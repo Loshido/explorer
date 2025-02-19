@@ -59,5 +59,5 @@ pub fn folder(prefix: PathBuf, path: PathBuf, directory: Directory) -> String {
         }
     }
 
-    HTML::folder_page(name, path_template, combined.to_str().unwrap().to_string(), files)
+    HTML::folder_page(name, path_template, path.to_str().unwrap().to_string(), files)
 }
