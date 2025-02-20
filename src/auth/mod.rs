@@ -64,7 +64,6 @@ impl Users {
         None
     }
 
-    #[allow(dead_code)]
     pub fn create(&mut self, username: String, password: String) -> bool {
         match self.exists(&username) {
             Some(_) => false,
@@ -73,6 +72,15 @@ impl Users {
                 self.save();
                 true
             }
+        }
+    }
+    pub fn remove(&mut self, username: String) -> bool {
+        if let Some(pos) = self.0.iter().position(|user| user.0.0 == username) {
+            self.0.remove(pos);
+            self.save();
+            true
+        } else {
+            false
         }
     }
     pub fn save(&self) {

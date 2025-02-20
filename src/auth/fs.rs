@@ -2,7 +2,7 @@ use std::{fs::{read, write}, path::Path};
 use super::{Directory, Users};
 use std::path::PathBuf;
 
-const PASSWD: &str = "./passwd";
+const PASSWD: &str = "./passwd.data";
 
 pub fn passwd() -> Users {
     let path = Path::new(PASSWD);
