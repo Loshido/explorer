@@ -1,4 +1,4 @@
-use std::path::{Path, PathBuf};
+use std::{path::{Path, PathBuf}, env};
 use rocket::{fs::NamedFile, http::CookieJar, response::Redirect};
 use crate::{html::build, auth::fs::{passwd, read_directory}};
 
@@ -41,8 +41,9 @@ pub async fn handler<'u>(suffix: PathBuf, cookie: &CookieJar<'u>) -> PrivateResp
             true => ()
         }
     }
-
-    let relative = Path::new("./data/");
+    
+    let explorer_data = env::var("EXPLORER_DATA").unwrap_or(String::from("./data"));
+    let relative = Path::new(explorer_data.as_str());
     let prefix = Path::new("/private/");
     let path = relative.join(suffix.clone());
 

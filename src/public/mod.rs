@@ -1,4 +1,4 @@
-use std::path::{Path, PathBuf};
+use std::{path::{Path, PathBuf}, env};
 use rocket::fs::NamedFile;
 use crate::{auth::fs::read_directory, html::build};
 
@@ -15,7 +15,8 @@ pub enum PublicResponse {
 #[get("/public/<suffix..>")]
 pub async fn handler(suffix: PathBuf) -> PublicResponse {
     // relative path to get files from the disk
-    let relative = Path::new("./data/public/");
+    let explorer_data = env::var("EXPLORER_DATA").unwrap_or(String::from("./data"));
+    let relative = Path::new(explorer_data.as_str()).join("public");
 
     // Prefix for redirection
     let prefix = Path::new("/public/");

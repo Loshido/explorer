@@ -48,7 +48,10 @@ pub fn read_directory(path: PathBuf) -> Directory {
                 .to_str().unwrap()
                 .to_string(); 
 
-
+            if p.starts_with(".") {
+                continue;
+            }
+            
             directory.push((
                 p, 
                 entry_path.path().is_dir()

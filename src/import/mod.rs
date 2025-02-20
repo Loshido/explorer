@@ -1,4 +1,4 @@
-use std::path::{Path, PathBuf};
+use std::{env, path::{Path, PathBuf}};
 
 use rocket::form::Form;
 use rocket::fs::TempFile;
@@ -27,7 +27,7 @@ pub struct Upload<'f> {
 }
 
 #[post("/import/<path..>", data = "<form>")]
-pub async fn handler(path: PathBuf, cookies: &CookieJar<'_>, mut form: Form<Upload<'_>>) -> ImportResponse {
+pub async fn handler(path: PathBuf, cookies: &CookieJar<'_>, form: Form<Upload<'_>>) -> ImportResponse {
     let cookie = cookies.get("token");
     if let Some(token) = cookie {
         let parse = token.value().parse::<u64>();
@@ -45,14 +45,25 @@ pub async fn handler(path: PathBuf, cookies: &CookieJar<'_>, mut form: Form<Uplo
                         filename = format!("{}.{}", filename, ext);
                     }
                 }
-                let filepath = Path::new("./data")
+
+                let explorer_data = env::var("EXPLORER_DATA").unwrap_or(String::from("./data"));
+                let relative = Path::new(explorer_data.as_str());
+                let filepath = relative
                     .join(path)
                     .join(filename);
-
-                let _ = form.file.persist_to(filepath).await;
-                return ImportResponse::Ok(
-                    Redirect::to(uri!("/private/"))
-                )
+    
+                if form.file.path().is_none() {
+                    return failed();
+                }
+                match std::fs::copy(form.file.path().unwrap(), filepath) {
+                    Ok(_) => {
+                        return ImportResponse::Ok(
+                            Redirect::to(uri!("/private/"))
+                        )
+                    },
+                    Err(..) => println!("couldn't copy due to: {:?}", ..)
+                }
+                return failed()
             }
         }
     }
