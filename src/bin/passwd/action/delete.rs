@@ -10,7 +10,7 @@ pub fn handle(args: Vec<String>) {
         return;
     }
 
-    let username = args[0].as_str();
+    let username = args[0].as_str().trim();
     let mut users = passwd();
 
     let success = users.remove(username.to_string());

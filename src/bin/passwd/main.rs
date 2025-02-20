@@ -5,16 +5,18 @@ use std::env;
 use erreurs::Erreur;
 
 fn main() {
-    let mut args: Vec<String> = env::args().collect();
-    args.remove(0);
-
-    if args.len() == 0 {
+    let mut args: Vec<String> = env::args()
+        .filter(|v| v.len() > 0).collect();
+    
+    if args.len() < 2 {
         erreurs::handle(Erreur::MauvaiseAction);
+        return;
     }
+    args.remove(0);
 
     let action = args[0].clone();
     args.remove(0);
-    let action = action.as_str();
+    let action = action.as_str().trim();
     match action {
         "create" => action::create::handle(args),
         "delete" => action::delete::handle(args),

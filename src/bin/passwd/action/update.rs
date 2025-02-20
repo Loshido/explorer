@@ -10,9 +10,9 @@ pub fn handle(args: Vec<String>) {
         return;
     }
 
-    let user = args[0].as_str();
-    let entry = args[1].as_str();
-    let value = args[2].as_str();
+    let user = args[0].as_str().trim();
+    let entry = args[1].as_str().trim();
+    let value = args[2].as_str().trim();
     let mut users = passwd();
 
     let user = users.0.iter_mut()
